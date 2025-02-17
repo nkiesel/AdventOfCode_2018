@@ -2,42 +2,30 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class Day05 {
-    private val sample = """dabAcCaCBAcCcaDA""".trimIndent().lines()
+    private val sample = """dabAcCaCBAcCcaDA"""
 
-    private fun parse(input: List<String>) = input[0]
-
-    private fun one(input: List<String>): Int {
-        var data = parse(input)
-        val letters = ('a'..'z').zip('A'..'Z').joinToString("|") { (l, u) -> "$l$u|$u$l" }.toRegex()
-        do {
-            val l = data.length
-            data = letters.replace(data, "")
-        } while (l != data.length)
-        return data.length
+    private fun one(data: String): Int {
+        val remaining = ArrayDeque<Char>(data.length)
+        data.forEach {
+            val c = if (it.isLowerCase()) it.uppercaseChar() else it.lowercaseChar()
+            if (c == remaining.lastOrNull()) remaining.removeLast() else remaining.addLast(it)
+        }
+        return remaining.size
     }
 
-    private fun two(input: List<String>): Int {
-        var data = parse(input)
-        val letters = ('a'..'z').zip('A'..'Z').joinToString("|") { (l, u) -> "$l$u|$u$l" }.toRegex()
-        return ('a'..'z').minOf { l ->
-            var d = data.replace(l.toString(), "", ignoreCase = true)
-            do {
-                val l = d.length
-                d = letters.replace(d, "")
-            } while (l != d.length)
-            d.length
-        }
+    private fun two(data: String): Int {
+        return ('a'..'z').minOf { one(data.replace(it.toString(), "", ignoreCase = true)) }
     }
 
     @Test
     fun testOne(input: List<String>) {
         one(sample) shouldBe 10
-        one(input) shouldBe 9822
+        one(input[0]) shouldBe 9822
     }
 
     @Test
     fun testTwo(input: List<String>) {
         two(sample) shouldBe 4
-        two(input) shouldBe 5726
+        two(input[0]) shouldBe 5726
     }
 }
