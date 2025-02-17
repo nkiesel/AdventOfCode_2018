@@ -117,8 +117,16 @@ class CountingMap<T>(
         m.getOrPut(k) { MutableLong(0L) }.value += amount
     }
 
+    fun inc(k: T, amount: Int) {
+        m.getOrPut(k) { MutableLong(0L) }.value += amount
+    }
+
     fun set(k: T, amount: Long) {
         m.getOrPut(k) { MutableLong(0L) }.value = amount
+    }
+
+    fun set(k: T, amount: Int) {
+        m.getOrPut(k) { MutableLong(0L) }.value = amount.toLong()
     }
 
     fun count(k: T) = m[k]?.value ?: 0L
