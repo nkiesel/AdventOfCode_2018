@@ -13,26 +13,27 @@ class Day06 {
 
     private fun parse(input: List<String>) = input.map { it.ints().let { (x, y) -> Point(x, y) } }
 
+    private fun area(upperLeft: Point, lowerRight: Point) = sequence {
+        for (x in upperLeft.x..lowerRight.x) for (y in upperLeft.y..lowerRight.y) yield(Point(x, y))
+    }
+
     private fun one(input: List<String>): Int {
         val points = parse(input)
         val upperLeft = Point(points.minOf { it.x }, points.minOf { it.y })
         val lowerRight = Point(points.maxOf { it.x }, points.maxOf { it.y })
-        val nearest = mutableMapOf<Point, String>()
         val edges = mutableSetOf<String>()
-        for (x in upperLeft.x..lowerRight.x) {
-            for (y in upperLeft.y..lowerRight.y) {
-                val p = Point(x, y)
-                val d = points.associateWith { manhattanDistance(p, it) }
-                val m = d.values.min()
-                val md = d.filter { it.value == m }
-                if (md.size == 1) {
-                    val v = md.keys.first().toString()
-                    if (x == upperLeft.x || x == lowerRight.x || y == upperLeft.y || y == lowerRight.y) edges += v
-                    else if (v !in edges) nearest[p] = v
-                }
+        return buildList {
+            for (p in area(upperLeft, lowerRight)) {
+                    val d = points.associateWith { manhattanDistance(p, it) }
+                    val m = d.values.min()
+                    val md = d.filter { it.value == m }
+                    if (md.size == 1) {
+                        val v = md.keys.first().toString()
+                        if (p.x == upperLeft.x || p.x == lowerRight.x || p.y == upperLeft.y || p.y == lowerRight.y) edges += v
+                        else if (v !in edges) add(v)
+                    }
             }
-        }
-        return nearest.values.filter { it !in edges }.groupingBy { it }.eachCount().values.max()
+        }.filter { it !in edges }.groupingBy { it }.eachCount().values.max()
     }
 
     private fun two(input: List<String>, maxSum: Int): Int {
@@ -40,14 +41,7 @@ class Day06 {
         val delta = maxSum / points.size
         val upperLeft = Point(points.minOf { it.x }, points.minOf { it.y }).move(-delta, -delta)
         val lowerRight = Point(points.maxOf { it.x }, points.maxOf { it.y }).move(delta, delta)
-        var s = 0
-        for (x in upperLeft.x..lowerRight.x) {
-            for (y in upperLeft.y..lowerRight.y) {
-                val p = Point(x, y)
-                if (points.sumOf { manhattanDistance(p, it) } < maxSum) s++
-            }
-        }
-        return s
+        return area(upperLeft, lowerRight).count { p -> points.sumOf { manhattanDistance(p, it) } < maxSum }
     }
 
     @Test
