@@ -13,17 +13,20 @@ class Day06 {
 
     private fun parse(input: List<String>) = input.map { it.ints().let { (x, y) -> Point(x, y) } }
 
-    private fun area(upperLeft: Point, lowerRight: Point) = sequence {
+    private lateinit var upperLeft: Point
+    private lateinit var lowerRight: Point
+
+    private fun area(points: List<Point>, delta: Int = 0) = sequence {
+        upperLeft = Point(points.minOf { it.x }, points.minOf { it.y }).move(-delta, -delta)
+        lowerRight = Point(points.maxOf { it.x }, points.maxOf { it.y }).move(delta, delta)
         for (x in upperLeft.x..lowerRight.x) for (y in upperLeft.y..lowerRight.y) yield(Point(x, y))
     }
 
     private fun one(input: List<String>): Int {
         val points = parse(input)
-        val upperLeft = Point(points.minOf { it.x }, points.minOf { it.y })
-        val lowerRight = Point(points.maxOf { it.x }, points.maxOf { it.y })
         val edges = mutableSetOf<String>()
         return buildList {
-            for (p in area(upperLeft, lowerRight)) {
+            for (p in area(points)) {
                     val d = points.associateWith { manhattanDistance(p, it) }
                     val m = d.values.min()
                     val md = d.filter { it.value == m }
@@ -38,10 +41,7 @@ class Day06 {
 
     private fun two(input: List<String>, maxSum: Int): Int {
         val points = parse(input)
-        val delta = maxSum / points.size
-        val upperLeft = Point(points.minOf { it.x }, points.minOf { it.y }).move(-delta, -delta)
-        val lowerRight = Point(points.maxOf { it.x }, points.maxOf { it.y }).move(delta, delta)
-        return area(upperLeft, lowerRight).count { p -> points.sumOf { manhattanDistance(p, it) } < maxSum }
+        return area(points, maxSum / points.size).count { p -> points.sumOf { manhattanDistance(p, it) } < maxSum }
     }
 
     @Test
