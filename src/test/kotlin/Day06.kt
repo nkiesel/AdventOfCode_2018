@@ -27,14 +27,14 @@ class Day06 {
         val edges = mutableSetOf<String>()
         return buildList {
             for (p in area(points)) {
-                    val d = points.associateWith { manhattanDistance(p, it) }
-                    val m = d.values.min()
-                    val md = d.filter { it.value == m }
-                    if (md.size == 1) {
-                        val v = md.keys.first().toString()
-                        if (p.x == upperLeft.x || p.x == lowerRight.x || p.y == upperLeft.y || p.y == lowerRight.y) edges += v
-                        else if (v !in edges) add(v)
-                    }
+                val d = points.associateWith { manhattanDistance(p, it) }
+                val m = d.values.min()
+                val md = d.filter { it.value == m }
+                if (md.size == 1) {
+                    val v = md.keys.first().toString()
+                    if (p.x == upperLeft.x || p.x == lowerRight.x || p.y == upperLeft.y || p.y == lowerRight.y) edges += v
+                    else if (v !in edges) add(v)
+                }
             }
         }.filter { it !in edges }.groupingBy { it }.eachCount().values.max()
     }
