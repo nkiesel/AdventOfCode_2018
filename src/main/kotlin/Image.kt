@@ -366,8 +366,37 @@ private val digitTiles = mapOf(
         """,
 ).mapValues { toBufferedImage(it.key, it.value) }
 
+private val egTiles = mapOf(
+    'E' to """
+        ...........
+        ..*******..
+        ..**.......
+        ..**.......
+        ..**.......
+        ..*******..
+        ..**.......
+        ..**.......
+        ..**.......
+        ..*******..
+        ...........
+        """,
+    'G' to """
+        ...........
+        ..******...
+        .**.....*..
+        .**........
+        .**........
+        .**..****..
+        .**.....*..
+        .**.....*..
+        .**.....*..
+        ...*****...
+        ...........
+        """,
+).mapValues { toBufferedImage(it.key, it.value) }
+
 enum class Tiles {
-    BASE, PATH, DIGIT
+    BASE, PATH, DIGIT, EG
 }
 
 private fun toBufferedImage(char: Char, data: String): BufferedImage {
@@ -416,6 +445,7 @@ private fun toPng(area: CharArea, tiles: Tiles, output: File) {
         Tiles.BASE -> baseTiles
         Tiles.PATH -> baseTiles + pathTiles
         Tiles.DIGIT -> baseTiles + digitTiles
+        Tiles.EG -> baseTiles + egTiles
     }
     area.tiles().forEach { p ->
         t[area[p]]?.let { graphics.drawImage(it, p.x * tileSize, p.y * tileSize, null) }

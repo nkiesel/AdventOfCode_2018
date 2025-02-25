@@ -59,7 +59,7 @@ enum class Direction {
     }
 }
 
-data class Point(val x: Int, val y: Int) {
+data class Point(val x: Int, val y: Int) : Comparable<Point> {
     fun move(d: Direction, n: Int = 1) = when (d) {
         Direction.N -> Point(x, y - n)
         Direction.NE -> Point(x + n, y - n)
@@ -75,10 +75,10 @@ data class Point(val x: Int, val y: Int) {
 
     fun move(p: Point, n: Int = 1) = Point(x + p.x * n, y + p.y * n)
 
-    fun neighbors4() = listOf(-1 to 0, 1 to 0, 0 to -1, 0 to 1)
+    fun neighbors4() = listOf(0 to -1, -1 to 0, 1 to 0, 0 to 1)
         .map { (dx, dy) -> Point(x + dx, y + dy) }
 
-    fun neighbors8() = listOf(-1 to -1, -1 to 0, -1 to 1, 0 to -1, 0 to 1, 1 to -1, 1 to 0, 1 to 1)
+    fun neighbors8() = listOf(-1 to -1, 0 to -1, 1 to -1, -1 to 0, 1 to 0, -1 to 1, 0 to 1, 1 to 1)
         .map { (dx, dy) -> Point(x + dx, y + dy) }
 
     operator fun minus(other: Point) = Point(x - other.x, y - other.y)
@@ -94,6 +94,8 @@ data class Point(val x: Int, val y: Int) {
         }
         error("Only handing 4 neighbors")
     }
+
+    override fun compareTo(other: Point): Int = compareValuesBy(this, other, Point::y, Point::x)
 }
 
 class CharArea(private val area: Array<CharArray>) {
