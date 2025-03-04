@@ -108,6 +108,12 @@ class CharArea(private val area: Array<CharArray>) {
 
     fun clone(def: Char): CharArea = CharArea(xRange.last + 1, yRange.last + 1, def)
 
+    fun clone(): CharArea {
+        val next = clone(' ')
+        tiles().forEach { next[it] = this[it] }
+        return next
+    }
+
     operator fun get(x: Int, y: Int) = area[y][x]
 
     fun getOrNull(x: Int, y: Int) = if (valid(x, y)) get(x, y) else null
