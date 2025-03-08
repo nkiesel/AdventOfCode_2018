@@ -74,6 +74,9 @@ class Day22 {
         val reached = mutableMapOf<Int, MutableSet<Pos>>()
         val seen = mutableSetOf<Pos>()
         reached[0] = mutableSetOf(Pos(ctx.start, torch, types[ctx.start]!!))
+        fun add(minutes: Int, pos: Pos) {
+            if (pos !in seen) reached.getOrPut(minutes) { mutableSetOf() }.add(pos)
+        }
         while (true) {
             val minutes = reached.keys.min()
             val reachedPos = reached[minutes]!!
@@ -81,7 +84,7 @@ class Day22 {
                 val (pos, tool, type) = p
                 if (pos == ctx.target) {
                     if (tool == torch) return minutes
-                    reached.getOrPut(minutes + 7) { mutableSetOf() } += Pos(ctx.target, torch, rocky)
+                    add(minutes + 7, Pos(ctx.target, torch, rocky))
                 }
                 for (n in pos.neighbors4().filter { it.x >= 0 && it.y >= 0 }) {
                     val nt = types.getOrPut(n) { regionType(erosionLevel(n, ctx)) }
@@ -94,9 +97,7 @@ class Day22 {
                         narrow to wet -> Pos(n, neither, nt)
                         else -> Pos(n, tool, type)
                     }
-                    if (np !in seen) {
-                        reached.getOrPut(minutes + if (tool == np.tool) 1 else 8) { mutableSetOf() } += np
-                    }
+                    add(minutes + if (tool == np.tool) 1 else 8, np)
                 }
             }
             seen += reachedPos
