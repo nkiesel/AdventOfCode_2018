@@ -1,9 +1,7 @@
 import org.jetbrains.kotlin.gradle.internal.config.LanguageFeature
 
 plugins {
-    kotlin("jvm") version "2.1.10"
-    alias(libs.plugins.versions)
-    alias(libs.plugins.versions.filter)
+    kotlin("jvm") version "2.1.20"
     alias(libs.plugins.versions.update)
 }
 
@@ -19,7 +17,6 @@ dependencies {
     implementation(libs.junit.jupiter.api)
     implementation(libs.junit.jupiter.engine)
     implementation(libs.junit.platform.launcher)
-    implementation(libs.kotlin.serialization)
 }
 
 tasks.test {
