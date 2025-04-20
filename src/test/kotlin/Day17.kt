@@ -43,7 +43,7 @@ class Day17 {
             when (area[n]) {
                 '.' -> area[n] = '|'
                 '|' -> return
-                '#' -> break
+                '~', '#' -> break
             }
         }
 
