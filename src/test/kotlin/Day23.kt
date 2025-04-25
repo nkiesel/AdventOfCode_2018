@@ -1,5 +1,11 @@
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.min
+import kotlin.math.pow
 
 class Day23 {
     private val sample = """
@@ -23,7 +29,13 @@ class Day23 {
         pos=<10,10,10>, r=5
     """.trimIndent().lines()
 
-    private fun parse(input: List<String>) = input.map { it.ints().let { it.take(3).toIntArray() to it.last() }}
+    data class Bot(val x: Int, val y: Int, val z: Int, val r: Int) {
+        constructor(p: IntArray, r: Int) : this(p[0], p[1], p[2], r)
+
+        fun contains(oz: Int, oy: Int, ox: Int) = abs(x - ox) + abs(y - oy) + abs(z - oz) <= r
+    }
+
+    private fun parse(input: List<String>) = input.map { it.ints().let { it.take(3).toIntArray() to it.last() } }
 
     private fun one(input: List<String>): Int {
         val teles = parse(input)
@@ -32,8 +44,61 @@ class Day23 {
     }
 
     private fun two(input: List<String>): Int {
-        val teles = parse(input)
-        return 0
+        val bots = parse(input).map { Bot(it.first, it.second) }
+        val minX = bots.minOf { it.x - it.r }
+        val minY = bots.minOf { it.y - it.r }
+        val minZ = bots.minOf { it.z - it.r }
+        val maxX = bots.maxOf { it.x + it.r }
+        val maxY = bots.maxOf { it.y + it.r }
+        val maxZ = bots.maxOf { it.z + it.r }
+        var count = 0
+        var best = 0
+        for (x in minX..maxX) {
+            for (y in minY..maxY) {
+                for (z in minZ..maxZ) {
+                    val s = bots.count { it.contains(x, y, z) }
+                    if (s > count) {
+                        count = s
+                        best = abs(x) + abs(y) + abs(z)
+                    } else if (s != 0 && s == count) {
+                        best = min(best, abs(x) + abs(y) + abs(z))
+                    }
+                }
+            }
+        }
+        return best
+    }
+
+    private fun twoA(input: List<String>) {
+        val bots = parse(input).map { Bot(it.first, it.second) }
+        val maxR = bots.maxOf { it.r }
+        val f = 10.0.pow(floor(log10(maxR.toDouble())))
+        val b = bots.map { Bot(ceil(it.x / f).toInt(), ceil(it.y / f).toInt(), ceil(it.z / f).toInt(), ceil(it.r / f).toInt()) }
+        val p = foo(b, 0, 0, 0)
+        println(p)
+        for (x in p) {
+            val bx = b.map { Bot(it.x * 10, it.y * 10, it.z * 10, it.r * 10) }
+        }
+    }
+
+    private fun foo(bots: List<Bot>, x: Int, y: Int, z: Int): List<List<Int>> {
+        var count = 0
+        val p = mutableListOf<List<Int>>()
+        for (x in (x - 10)..(x + 10)) {
+            for (y in (y - 10)..(y + 10)) {
+                for (z in (z - 10)..(z + 10)) {
+                    val s = bots.count { it.contains(x, y, z) }
+                    if (s > count) {
+                        count = s
+                        p.clear()
+                        p += listOf(x, y, z)
+                    } else if (s != 0 && s == count) {
+                        p += listOf(x, y, z)
+                    }
+                }
+            }
+        }
+        return p
     }
 
     @Test
@@ -44,7 +109,8 @@ class Day23 {
 
     @Test
     fun testTwo(input: List<String>) {
-        two(sample2) shouldBe 36
+        twoA(sample2)
+//        two(sample2) shouldBe 36
 //        two(input) shouldBe 0
     }
 }

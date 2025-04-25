@@ -71,7 +71,7 @@ class Day25 {
         return constellations.size
     }
 
-    fun m4(a: List<Int>, b: List<Int>) = (0..3).sumOf { abs(a[it] - b[it]) }
+    private fun m4(a: List<Int>, b: List<Int>) = (0..3).sumOf { abs(a[it] - b[it]) }
 
     @Test
     fun testOne(input: List<String>) {
