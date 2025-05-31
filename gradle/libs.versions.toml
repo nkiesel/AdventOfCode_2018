@@ -1,6 +1,6 @@
 [versions]
-junit5 = "5.12.2"
-junit5-launcher = "1.12.2"
+junit5 = "5.13.0"
+junit5-launcher = "1.13.0"
 kotest = "5.9.1"
 plugin-versionsUpdate = "1.0.0"
 
