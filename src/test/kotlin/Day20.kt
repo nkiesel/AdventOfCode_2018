@@ -1,4 +1,3 @@
-import Direction.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

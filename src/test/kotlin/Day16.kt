@@ -1,4 +1,3 @@
-import Day16.Op.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 

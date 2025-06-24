@@ -1,4 +1,3 @@
-import Day22.Tool.*
 import Direction.N
 import Direction.W
 import io.kotest.matchers.shouldBe

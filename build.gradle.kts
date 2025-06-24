@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.internal.config.LanguageFeature
-
 plugins {
-    kotlin("jvm") version "2.1.21"
+    kotlin("jvm") version "2.2.0"
     alias(libs.plugins.versions.update)
 }
 
@@ -32,14 +30,8 @@ tasks.test {
 kotlin {
     jvmToolchain(21)
     @Suppress("UnsafeCompilerArguments")
-    sourceSets.all {
-        languageSettings {
-            enableLanguageFeature(LanguageFeature.WhenGuards.name)
-            enableLanguageFeature(LanguageFeature.MultiDollarInterpolation.name)
-            enableLanguageFeature(LanguageFeature.BreakContinueInInlineLambdas.name)
-        }
-    }
     compilerOptions {
         suppressWarnings = true
+        freeCompilerArgs.add("-Xcontext-sensitive-resolution")
     }
 }
