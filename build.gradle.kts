@@ -32,7 +32,11 @@ kotlin {
     @Suppress("UnsafeCompilerArguments")
     compilerOptions {
         suppressWarnings = true
-        freeCompilerArgs.add("-Xcontext-sensitive-resolution")
-        freeCompilerArgs.add("-Xcontext-parameters")
+        freeCompilerArgs.set(
+            listOf(
+                "-Xcontext-sensitive-resolution",
+                "-Xcontext-parameters",
+            )
+        )
     }
 }
