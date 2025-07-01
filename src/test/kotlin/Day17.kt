@@ -22,7 +22,8 @@ class Day17 {
         }
     }
 
-    private fun toWall(s: Point, direction: Direction, area: CharArea): List<Point>? {
+    context(area: CharArea)
+    private fun toWall(s: Point, direction: Direction): List<Point>? {
         var n = s
         val l = mutableListOf<Point>()
         while (true) {
@@ -35,7 +36,8 @@ class Day17 {
         }
     }
 
-    private fun fill(s: Point, area: CharArea) {
+    context(area: CharArea)
+    private fun fill(s: Point) {
         var n = s
         while (true) {
             n = n.move(Direction.S)
@@ -49,8 +51,8 @@ class Day17 {
 
         while (true) {
             n = n.move(Direction.N)
-            val left = toWall(n, Direction.W, area)
-            val right = toWall(n, Direction.E, area)
+            val left = toWall(n, Direction.W)
+            val right = toWall(n, Direction.E)
             if (left == null || right == null) break
             (left + right + n).forEach { area[it] = '~' }
         }
@@ -64,7 +66,7 @@ class Day17 {
                 m = m.move(d)
             } while (s != '.' && s != '|' && area[m] != '#')
             if (s == '.') {
-                fill(m.move(d.reverse()), area)
+                fill(m.move(d.reverse()))
             }
         }
     }
@@ -80,7 +82,9 @@ class Day17 {
         points.forEach { area[it.x - rx, it.y] = '#' }
         val spring = Point(500 - rx, 0)
         area[spring] = '+'
-        fill(spring, area)
+        with(area) {
+            fill(spring)
+        }
         area.tiles { it == '|' }.filter { area[it.move(Direction.N)] == '~' }.forEach { area[it] = '~' }
 //        area.png()
         val minY = points.minOf { it.y }
