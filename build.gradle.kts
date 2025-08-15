@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.2.0"
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.versions.update)
 }
 
