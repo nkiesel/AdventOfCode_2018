@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest)
+    implementation(libs.kotest)
 }
 
 tasks.test {
