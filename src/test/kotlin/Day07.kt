@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day07 {
+object Day07 {
     private fun parse(input: List<String>): Pair<MutableSet<Char>, Map<Char, Set<Char>>> {
         val before = input.map { l -> l.split(" ").let { it[1][0] to it[7][0] } }
         val steps = before.flatMap { it.toList() }.sorted().toMutableSet()
@@ -66,7 +66,7 @@ class Day07 {
     }
 }
 
-class Day07Test : FunSpec({
+object Day07Test : FunSpec({
     val input = lines("Day07")
 
     val sample = """
@@ -79,7 +79,7 @@ class Day07Test : FunSpec({
         Step F must be finished before step E can begin.
     """.trimIndent().lines()
 
-    with(Day07()) {
+    with(Day07) {
         test("one") {
             one(sample) shouldBe "CABDFE"
             one(input) shouldBe "CFMNLOAHRKPTWBJSYZVGUQXIDE"

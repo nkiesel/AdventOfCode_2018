@@ -1,7 +1,8 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Template {
+object Template {
     private fun parse(input: List<String>) = input
 
     fun one(input: List<String>): Int {
@@ -13,12 +14,12 @@ class Template {
     }
 }
 
-class TemplateTest : FunSpec({
+object TemplateTest : FunSpec({
     val input = lines("Template")
 
     val sample = """""".trimIndent().lines()
 
-    with(Template()) {
+    with(Template) {
         test("one") {
             one(sample) shouldBe 0
 //            one(input) shouldBe 0

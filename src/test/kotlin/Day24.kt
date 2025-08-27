@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day24 {
+object Day24 {
     enum class Damage {
         radiation, fire, bludgeoning, cold, slashing
     }
@@ -125,7 +125,7 @@ class Day24 {
     }
 }
 
-class Day24Test : FunSpec({
+object Day24Test : FunSpec({
     val input = lines("Day24")
 
     val sample = """
@@ -139,12 +139,12 @@ class Day24Test : FunSpec({
     """.trimIndent().lines()
 
     test("one") {
-        Day24().one(sample) shouldBe 5216
-        Day24().one(input) shouldBe 15470
+        Day24.one(sample) shouldBe 5216
+        Day24.one(input) shouldBe 15470
     }
 
     test("two") {
-        Day24().two(sample) shouldBe 51
-        Day24().two(input) shouldBe 5742
+        Day24.two(sample) shouldBe 51
+        Day24.two(input) shouldBe 5742
     }
 })

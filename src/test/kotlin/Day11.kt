@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 import kotlin.math.max
 import kotlin.math.sqrt
 
-class Day11 {
+object Day11 {
     private fun parse(input: List<String>): Array<IntArray> {
         val serial = input[0].toInt()
         val area = Array(300) { IntArray(300) { 0 } }
@@ -55,14 +55,14 @@ class Day11 {
     }
 }
 
-class Day11Test : FunSpec({
+object Day11Test : FunSpec({
     val input = lines("Day11")
 
     val sample = """
         18
     """.trimIndent().lines()
 
-    with(Day11()) {
+    with(Day11) {
         test("one") {
             one(sample) shouldBe "33,45"
             one(input) shouldBe "21,41"

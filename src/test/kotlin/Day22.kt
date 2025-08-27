@@ -3,7 +3,7 @@ import Direction.W
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day22 {
+object Day22 {
     private val rocky = '.'
     private val wet = '='
     private val narrow = '|'
@@ -100,7 +100,7 @@ class Day22 {
     }
 }
 
-class Day22Test : FunSpec({
+object Day22Test : FunSpec({
     val input = lines("Day22")
 
     val sample = """
@@ -108,7 +108,7 @@ class Day22Test : FunSpec({
         target: 10,10
     """.trimIndent().lines()
 
-    with(Day22()) {
+    with(Day22) {
         test("one") {
             one(sample) shouldBe 114
             one(input) shouldBe 4479

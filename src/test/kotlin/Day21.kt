@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day21 {
+object Day21 {
     val sample = """"""
         .trimIndent()
         .lines()
@@ -17,12 +17,12 @@ class Day21 {
     }
 }
 
-class Day21Test : FunSpec({
+object Day21Test : FunSpec({
     val input = lines("Day21")
 
-    val sample = Day21().sample
+    val sample = Day21.sample
 
-    with(Day21()) {
+    with(Day21) {
         test("one") {
             one(sample) shouldBe 0
             // one(input) shouldBe <expected_result> // Uncomment and set expected value when ready

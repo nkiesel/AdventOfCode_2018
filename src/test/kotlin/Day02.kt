@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day02 {
+object Day02 {
     private fun parse(input: List<String>) = input
 
     fun one(input: List<String>): Int {
@@ -29,7 +29,7 @@ class Day02 {
     }
 }
 
-class Day02Test : FunSpec({
+object Day02Test : FunSpec({
     val input = lines("Day02")
 
     val sample = """
@@ -52,7 +52,7 @@ class Day02Test : FunSpec({
         wvxyz
     """.trimIndent().lines()
 
-    with(Day02()) {
+    with(Day02) {
         test("one") {
             one(sample) shouldBe 12
             one(input) shouldBe 5750

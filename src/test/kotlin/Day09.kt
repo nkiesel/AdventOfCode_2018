@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day09 {
+object Day09 {
     private fun parse(input: List<String>) = input[0].ints()
 
     private fun three(input: List<String>, fac: Int): Long {
@@ -30,10 +30,10 @@ class Day09 {
     fun two(input: List<String>) = three(input, 100)
 }
 
-class Day09Test : FunSpec({
+object Day09Test : FunSpec({
     val input = lines("Day09")
 
-    with(Day09()) {
+    with(Day09) {
         test("one") {
             fun t(players: Int, points: Int) = one(listOf("$players players; last marble is worth $points points"))
             t(9, 25) shouldBe 32

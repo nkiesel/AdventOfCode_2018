@@ -2,7 +2,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlin.math.abs
 
-class Day25 {
+object Day25 {
     private fun parse(input: List<String>) = input.map { it.ints() }
 
     fun one(input: List<String>): Int {
@@ -24,7 +24,7 @@ class Day25 {
     private fun m4(a: List<Int>, b: List<Int>) = (0..3).sumOf { abs(a[it] - b[it]) }
 }
 
-class Day25Test : FunSpec({
+object Day25Test : FunSpec({
     val input = lines("Day25")
 
     val sample1 = """
@@ -78,7 +78,7 @@ class Day25Test : FunSpec({
     """.trimIndent().lines()
 
     test("one") {
-        with(Day25()) {
+        with(Day25) {
             one(sample1) shouldBe 2
             one(sample2) shouldBe 4
             one(sample3) shouldBe 3

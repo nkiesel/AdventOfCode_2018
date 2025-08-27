@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 
 enum class Part { ONE, TWO }
 
-class Day04 {
+object Day04 {
     private fun parse(input: List<String>) = input.map { it.split("] ") }.sortedBy { it.first() }
 
     private fun three(input: List<String>, part: Part): Int {
@@ -60,7 +60,7 @@ class Day04 {
     fun two(input: List<String>) = three(input, Part.TWO)
 }
 
-class Day04Test : FunSpec({
+object Day04Test : FunSpec({
     val input = lines("Day04")
 
     val sample = """
@@ -83,7 +83,7 @@ class Day04Test : FunSpec({
         [1518-11-05 00:55] wakes up
     """.trimIndent().lines()
 
-    with(Day04()) {
+    with(Day04) {
         test("one") {
             one(sample) shouldBe 240
             one(input) shouldBe 87681

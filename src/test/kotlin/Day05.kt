@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day05 {
+object Day05 {
     fun one(data: String): Int {
         val remaining = ArrayDeque<Char>(data.length)
         data.forEach {
@@ -16,12 +16,12 @@ class Day05 {
     }
 }
 
-class Day05Test : FunSpec({
+object Day05Test : FunSpec({
     val input = lines("Day05")
 
     val sample = "dabAcCaCBAcCcaDA"
 
-    with(Day05()) {
+    with(Day05) {
         test("one") {
             one(sample) shouldBe 10
             one(input[0]) shouldBe 9822

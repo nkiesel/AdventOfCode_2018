@@ -2,7 +2,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlin.math.*
 
-class Day23 {
+object Day23 {
     data class Bot(val x: Int, val y: Int, val z: Int, val r: Int) {
         constructor(p: IntArray, r: Int) : this(p[0], p[1], p[2], r)
 
@@ -83,7 +83,7 @@ class Day23 {
     }
 }
 
-class Day23Test : FunSpec({
+object Day23Test : FunSpec({
     val input = lines("Day23")
 
     val sample = """
@@ -107,7 +107,7 @@ class Day23Test : FunSpec({
         pos=<10,10,10>, r=5
     """.trimIndent().lines()
 
-    with(Day23()) {
+    with(Day23) {
         test("one") {
             one(sample) shouldBe 7
             one(input) shouldBe 326

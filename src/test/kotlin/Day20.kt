@@ -2,7 +2,7 @@ import Direction.*
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day20 {
+object Day20 {
 
     internal fun groups(regex: String, s: Int): Pair<List<String>, Int> {
         var i = s + 1
@@ -87,10 +87,10 @@ class Day20 {
 
 }
 
-class Day20Test : FunSpec({
+object Day20Test : FunSpec({
     val input = lines("Day20")
 
-    with(Day20()) {
+    with(Day20) {
         test("one") {
             one($$"^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$") shouldBe 18
             one($$"^WNE$") shouldBe 3

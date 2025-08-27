@@ -2,7 +2,7 @@ import Direction.*
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day13 {
+object Day13 {
 
     class Cart(var pos: Point, d: Char) : Comparable<Cart> {
         var intersections: Int = 0
@@ -81,7 +81,7 @@ class Day13 {
     }
 }
 
-class Day13Test : FunSpec({
+object Day13Test : FunSpec({
     val input = lines("Day13")
 
     val sample = """
@@ -103,7 +103,7 @@ class Day13Test : FunSpec({
           \<->/        
     """.trimIndent().lines()
 
-    with(Day13()) {
+    with(Day13) {
         test("one") {
             one(sample) shouldBe "7,3"
             one(input) shouldBe "39,52"

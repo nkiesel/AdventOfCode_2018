@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class Day14 {
+object Day14 {
     private fun three(input: List<String>, part: Part): String {
         val data = "37".map { it.digitToInt() }.toMutableList()
         var e1 = 0
@@ -35,10 +35,10 @@ class Day14 {
     fun two(input: List<String>) = three(input, Part.TWO)
 }
 
-class Day14Test : FunSpec({
+object Day14Test : FunSpec({
     val input = lines("Day14")
 
-    with(Day14()) {
+    with(Day14) {
         test("one") {
             one(listOf("9")) shouldBe "5158916779"
             one(listOf("18")) shouldBe "9251071085"
