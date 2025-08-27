@@ -40,11 +40,12 @@ class Day13 {
 
     fun one(input: List<String>): String {
         val (area, carts) = parse(input)
+        val ns = setOf(N, S)
         while (true) {
             for (c in carts.sorted()) {
                 when (area[c.pos]) {
-                    '/' -> if (c.direction in setOf(N, S)) c.turnRight() else c.turnLeft()
-                    '\\' -> if (c.direction in setOf(N, S)) c.turnLeft() else c.turnRight()
+                    '/' -> if (c.direction in ns) c.turnRight() else c.turnLeft()
+                    '\\' -> if (c.direction in ns) c.turnLeft() else c.turnRight()
                     '+' -> when (c.intersections++ % 3) {
                         0 -> c.turnLeft()
                         2 -> c.turnRight()
