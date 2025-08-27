@@ -1,13 +1,9 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day16 {
-    private val sample = """
-        Before: [3, 2, 1, 1]
-        9 2 1 2
-        After:  [3, 2, 2, 1]
-    """.trimIndent().lines()
-
     private class Sample(val before: List<Int>, val args: List<Int>, val after: List<Int>)
 
     private fun parse(input: List<String>): List<Sample> {
@@ -59,11 +55,11 @@ class Day16 {
         }
     }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         return parse(input).count { sample -> Op.entries.count { op -> possible(op, sample) } >= 3 }
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         val samples = parse(input)
         val program = input.drop(samples.size * 4).filter { it.isNotEmpty() }.map { it.ints() }
         val candidates = samples.map { s -> s.args[0] to Op.entries.filter { possible(it, s) }.toMutableSet() }
@@ -82,15 +78,25 @@ class Day16 {
         program.forEach { i -> execute(operations[i[0]]!!, i.drop(1), registers) }
         return registers[0]
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 1
-        one(input) shouldBe 531
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(input) shouldBe 649
-    }
 }
+
+class Day16Test : FunSpec({
+    val input = Path("input/Day16.txt").readLines()
+
+    val sample = """
+        Before: [3, 2, 1, 1]
+        9 2 1 2
+        After:  [3, 2, 2, 1]
+    """.trimIndent().lines()
+
+    with(Day16()) {
+        test("one") {
+            one(sample) shouldBe 1
+            one(input) shouldBe 531
+        }
+
+        test("two") {
+            two(input) shouldBe 649
+        }
+    }
+})

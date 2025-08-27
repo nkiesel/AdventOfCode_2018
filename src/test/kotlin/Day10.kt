@@ -1,8 +1,34 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day10 {
-    private val sample = """
+    fun one(input: List<String>): Int {
+        val data = input.map { it.ints() }.map { Point(it[0], it[1]) to Point(it[2], it[3]) }
+        var pos = data.map { it.first }
+        val vel = data.map { it.second }
+        var s = 0
+        while (true) {
+            s++
+            pos = pos.mapIndexed { i, p -> p.move(vel[i]) }
+            if (pos.any { p -> (0..6).all { p.move(0, -it) in pos } }) break
+        }
+        val minX = pos.minOf { it.x }
+        val minY = pos.minOf { it.y }
+        val maxX = pos.maxOf { it.x }
+        val maxY = pos.maxOf { it.y }
+        val area = CharArea(maxX - minX + 1, maxY - minY + 1, '.')
+        pos.map { it.move(-minX, -minY) }.forEach { area[it] = '#' }
+        area.png()
+        return s
+    }
+}
+
+class Day10Test : FunSpec({
+    val input = Path("input/Day10.txt").readLines()
+
+    val sample = """
         position=< 9,  1> velocity=< 0,  2>
         position=< 7,  0> velocity=<-1,  0>
         position=< 3, -2> velocity=<-1,  1>
@@ -36,29 +62,11 @@ class Day10 {
         position=<-3,  6> velocity=< 2, -1>
     """.trimIndent().lines()
 
-    private fun one(input: List<String>): Int {
-        val data = input.map { it.ints() }.map { Point(it[0], it[1]) to Point(it[2], it[3]) }
-        var pos = data.map { it.first }
-        val vel = data.map { it.second }
-        var s = 0
-        while (true) {
-            s++
-            pos = pos.mapIndexed { i, p -> p.move(vel[i]) }
-            if (pos.any { p -> (0..6).all { p.move(0, -it) in pos } }) break
-        }
-        val minX = pos.minOf { it.x }
-        val minY = pos.minOf { it.y }
-        val maxX = pos.maxOf { it.x }
-        val maxY = pos.maxOf { it.y }
-        val area = CharArea(maxX - minX + 1, maxY - minY + 1, '.')
-        pos.map { it.move(-minX, -minY) }.forEach { area[it] = '#' }
-        area.png()
-        return s
-    }
 
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 3 // HI
-        one(input) shouldBe 10391 // BFFZCNXE
+    with(Day10()) {
+        test("one") {
+            one(sample) shouldBe 3 // HI
+            one(input) shouldBe 10391 // BFFZCNXE
+        }
     }
-}
+})

@@ -1,41 +1,31 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day07 {
-    private val sample = """
-        Step C must be finished before step A can begin.
-        Step C must be finished before step F can begin.
-        Step A must be finished before step B can begin.
-        Step A must be finished before step D can begin.
-        Step B must be finished before step E can begin.
-        Step D must be finished before step E can begin.
-        Step F must be finished before step E can begin.
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>): Pair<MutableSet<Char>, Map<Char, Set<Char>>> {
-        val before = input.map { it.split(" ").let { it[1][0] to it[7][0] } }
+        val before = input.map { l -> l.split(" ").let { it[1][0] to it[7][0] } }
         val steps = before.flatMap { it.toList() }.sorted().toMutableSet()
         val after = mutableMapOf<Char, MutableSet<Char>>()
         before.forEach { (b, a) -> after.getOrPut(a) { mutableSetOf() } += b }
         return steps to after
     }
 
-
-    private fun one(input: List<String>): String {
+    fun one(input: List<String>): String {
         val (steps, after) = parse(input)
         val start = steps.first { after[it] == null }
         val visited = mutableSetOf(start)
         steps -= visited
         while (steps.isNotEmpty()) {
-            val n = steps.first { after[it].let { it.isNullOrEmpty() || visited.containsAll(it) } }
+            val n = steps.first { s -> after[s].let { it.isNullOrEmpty() || visited.containsAll(it) } }
             visited += n
             steps -= n
         }
-
         return visited.joinToString("")
     }
 
-    private fun two(input: List<String>, nw: Int, delay: Int): Int {
+    fun two(input: List<String>, nw: Int, delay: Int): Int {
         val (steps, after) = parse(input)
         val visited = mutableSetOf<Char>()
 
@@ -63,13 +53,12 @@ class Day07 {
         }
 
         val workers = List(nw) { Worker() }
-
         var t = 0
         while (true) {
             t++
             workers.forEach { it.step() }
             workers.filter { it.s == null }.forEach { w ->
-                val c = steps.firstOrNull { after[it].let { it.isNullOrEmpty() || visited.containsAll(it) } }
+                val c = steps.firstOrNull { s -> after[s].let { it.isNullOrEmpty() || visited.containsAll(it) } }
                 if (c != null) {
                     w.take(c)
                     if (steps.isEmpty()) return t + workers.sumOf { it.d }
@@ -77,16 +66,30 @@ class Day07 {
             }
         }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe "CABDFE"
-        one(input) shouldBe "CFMNLOAHRKPTWBJSYZVGUQXIDE"
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample, 2, 0) shouldBe 15
-        two(input, 5, 60) shouldBe 971
-    }
 }
+
+class Day07Test : FunSpec({
+    val input = Path("input/Day07.txt").readLines()
+
+    val sample = """
+        Step C must be finished before step A can begin.
+        Step C must be finished before step F can begin.
+        Step A must be finished before step B can begin.
+        Step A must be finished before step D can begin.
+        Step B must be finished before step E can begin.
+        Step D must be finished before step E can begin.
+        Step F must be finished before step E can begin.
+    """.trimIndent().lines()
+
+    with(Day07()) {
+        test("one") {
+            one(sample) shouldBe "CABDFE"
+            one(input) shouldBe "CFMNLOAHRKPTWBJSYZVGUQXIDE"
+        }
+
+        test("two") {
+            two(sample, 2, 0) shouldBe 15
+            two(input, 5, 60) shouldBe 971
+        }
+    }
+})

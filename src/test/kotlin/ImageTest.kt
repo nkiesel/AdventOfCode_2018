@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.FunSpec
 
-class ImageTest {
-
-    @Test
-    fun `show sample2 from 2023 Day 10`() {
+class ImageTest : FunSpec({
+    test("show sample2 from 2023 Day 10") {
         CharArea(
             """
                 ...........
@@ -19,8 +17,7 @@ class ImageTest {
         ).png()
     }
 
-    @Test
-    fun `show sample3 from 2023 Day 10`() {
+    test("show sample3 from 2023 Day 10") {
         CharArea(
             """
                 .F----7F7F7F7F-7....
@@ -37,8 +34,7 @@ class ImageTest {
         ).png(Tiles.PATH)
     }
 
-    @Test
-    fun `show sample4 from 2023 Day 10`() {
+    test("show sample4 from 2023 Day 10") {
         CharArea(
             """
                 FF7FSF7F7F7F7F7F---7
@@ -55,8 +51,7 @@ class ImageTest {
         ).png(Tiles.PATH)
     }
 
-    @Test
-    fun `show digits`() {
+    test("show digits") {
         CharArea(
             """
                 .........
@@ -67,4 +62,4 @@ class ImageTest {
                 """
         ).png(Tiles.DIGIT)
     }
-}
+})

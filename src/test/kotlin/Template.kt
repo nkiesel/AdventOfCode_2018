@@ -1,28 +1,34 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Template {
-    private val sample = """""".trimIndent().lines()
-
     private fun parse(input: List<String>) = input
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         return 0
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         return 0
-    }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 0
-//        one(input) shouldBe 0
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-//        two(sample) shouldBe 0
-//        two(input) shouldBe 0
     }
 }
+
+class TemplateTest : FunSpec({
+    val input = Path("input/Template.txt").readLines()
+
+    val sample = """""".trimIndent().lines()
+
+    with(Template()) {
+        test("one") {
+            one(sample) shouldBe 0
+//            one(input) shouldBe 0
+        }
+
+        xtest("two") {
+            two(sample) shouldBe 0
+//            two(input) shouldBe 0
+        }
+    }
+})

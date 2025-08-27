@@ -1,70 +1,12 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day15 {
-    private val sample1 = """
-        #######
-        #.G...#
-        #...EG#
-        #.#.#G#
-        #..G#E#
-        #.....#
-        #######
-    """.trimIndent().lines()
-
-    private val sample2 = """
-        #######
-        #G..#E#
-        #E#E.E#
-        #G.##.#
-        #...#E#
-        #...E.#
-        #######
-    """.trimIndent().lines()
-
-    private val sample3 = """
-        #######
-        #E..EG#
-        #.#G.E#
-        #E.##E#
-        #G..#.#
-        #..E#.#
-        #######
-    """.trimIndent().lines()
-
-    private val sample4 = """
-        #######
-        #E.G#.#
-        #.#G..#
-        #G.#.G#   
-        #G..#.#
-        #...E.#
-        #######
-    """.trimIndent().lines()
-
-    private val sample5 = """
-        #######
-        #.E...#   
-        #.#..G#
-        #.###.#
-        #E#G#G#
-        #...#G#
-        #######
-    """.trimIndent().lines()
-
-    private val sample6 = """
-        #########
-        #G......#
-        #.E.#...#
-        #..##..G#
-        #...##..#
-        #...#...#
-        #.G...G.#
-        #.....G.#
-        #########
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>) = CharArea(input)
+
+    data class Path(val next: Point, val steps: Int, val target: Point)
 
     class Unit(val start: Point, val area: CharArea) : Comparable<Unit> {
         val type = area[start]
@@ -87,8 +29,6 @@ class Day15 {
             return true
         }
 
-        data class Path(val next: Point, val steps: Int, val target: Point)
-
         fun move(targets: List<Unit>): Boolean {
             val possibleNext = area.neighbors4(pos) { it == '.' }
             if (possibleNext.isEmpty()) return false
@@ -96,7 +36,7 @@ class Day15 {
             val inRange = targets.flatMap { area.neighbors4(it.pos) { it == '.' } }.toSet()
             if (inRange.isEmpty()) return false
 
-            var np = possibleNext.mapIndexedNotNull { i, n ->
+            var np = possibleNext.mapIndexedNotNull { _, n ->
                 val t = bfs(n) { area.neighbors4(it) { it == '.' } }.filter { it.value in inRange }
                 t.minOfOrNull { it.index }?.let { m -> Path(n, m, t.filter { it.index == m }.minOf { it.value }) }
             }
@@ -108,10 +48,6 @@ class Day15 {
             return true
         }
     }
-
-    private fun one(input: List<String>) = three(input, Part.ONE)
-
-    private fun two(input: List<String>) = three(input, Part.TWO)
 
     private fun three(input: List<String>, part: Part): Any {
         var (attackPowerMin, attackPowerMax) = if (part == Part.ONE) 3 to 3 else 4 to 200
@@ -144,24 +80,95 @@ class Day15 {
         }
     }
 
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample1) shouldBe 27730
-        one(sample2) shouldBe 36334
-        one(sample3) shouldBe 39514
-        one(sample4) shouldBe 27755
-        one(sample5) shouldBe 28944
-        one(sample6) shouldBe 18740
-        one(input) shouldBe 220480
-    }
+    fun one(input: List<String>) = three(input, Part.ONE)
 
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample1) shouldBe 4988
-        two(sample3) shouldBe 31284
-        two(sample4) shouldBe 3478
-        two(sample5) shouldBe 6474
-        two(sample6) shouldBe 1140
-        two(input) shouldBe 53576
-    }
+    fun two(input: List<String>) = three(input, Part.TWO)
+
 }
+
+class Day15Test : FunSpec({
+    val input = Path("input/Day15.txt").readLines()
+
+    val sample1 = """
+        #######
+        #.G...#
+        #...EG#
+        #.#.#G#
+        #..G#E#
+        #.....#
+        #######
+    """.trimIndent().lines()
+
+    val sample2 = """
+        #######
+        #G..#E#
+        #E#E.E#
+        #G.##.#
+        #...#E#
+        #...E.#
+        #######
+    """.trimIndent().lines()
+
+    val sample3 = """
+        #######
+        #E..EG#
+        #.#G.E#
+        #E.##E#
+        #G..#.#
+        #..E#.#
+        #######
+    """.trimIndent().lines()
+
+    val sample4 = """
+        #######
+        #E.G#.#
+        #.#G..#
+        #G.#.G#   
+        #G..#.#
+        #...E.#
+        #######
+    """.trimIndent().lines()
+
+    val sample5 = """
+        #######
+        #.E...#   
+        #.#..G#
+        #.###.#
+        #E#G#G#
+        #...#G#
+        #######
+    """.trimIndent().lines()
+
+    val sample6 = """
+        #########
+        #G......#
+        #.E.#...#
+        #..##..G#
+        #...##..#
+        #...#...#
+        #.G...G.#
+        #.....G.#
+        #########
+    """.trimIndent().lines()
+
+    with(Day15()) {
+        test("one") {
+            one(sample1) shouldBe 27730
+            one(sample2) shouldBe 36334
+            one(sample3) shouldBe 39514
+            one(sample4) shouldBe 27755
+            one(sample5) shouldBe 28944
+            one(sample6) shouldBe 18740
+            one(input) shouldBe 220480
+        }
+
+        test("two") {
+            two(sample1) shouldBe 4988
+            two(sample3) shouldBe 31284
+            two(sample4) shouldBe 3478
+            two(sample5) shouldBe 6474
+            two(sample6) shouldBe 1140
+            two(input) shouldBe 53576
+        }
+    }
+})

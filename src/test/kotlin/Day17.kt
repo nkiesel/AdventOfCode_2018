@@ -1,18 +1,9 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day17 {
-    private val sample = """
-        x=495, y=2..7
-        y=7, x=495..501
-        x=501, y=3..7
-        x=498, y=2..4
-        x=506, y=1..2
-        x=498, y=10..13
-        x=504, y=10..13
-        y=13, x=498..504
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>): List<Point> {
         return buildList {
             input.forEach { l ->
@@ -56,9 +47,8 @@ class Day17 {
             if (left == null || right == null) break
             (left + right + n).forEach { area[it] = '~' }
         }
-
         for (d in listOf(Direction.E, Direction.W)) {
-            var s = '.'
+            var s: Char
             var m = n
             do {
                 area[m] = '|'
@@ -70,10 +60,6 @@ class Day17 {
             }
         }
     }
-
-    private fun one(input: List<String>) = three(input, Part.ONE)
-
-    private fun two(input: List<String>) = three(input, Part.TWO)
 
     private fun three(input: List<String>, part: Part): Int {
         val points = parse(input)
@@ -92,15 +78,34 @@ class Day17 {
         return area.tiles { it in relevant }.filter { it.y >= minY }.count()
     }
 
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 57
-        one(input) shouldBe 38364
-    }
+    fun one(input: List<String>) = three(input, Part.ONE)
+    fun two(input: List<String>) = three(input, Part.TWO)
 
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 29
-        two(input) shouldBe 30551
-    }
 }
+
+class Day17Test : FunSpec({
+    val input = Path("input/Day17.txt").readLines()
+
+    val sample = """
+        x=495, y=2..7
+        y=7, x=495..501
+        x=501, y=3..7
+        x=498, y=2..4
+        x=506, y=1..2
+        x=498, y=10..13
+        x=504, y=10..13
+        y=13, x=498..504
+    """.trimIndent().lines()
+
+    with(Day17()) {
+        test("one") {
+            one(sample) shouldBe 57
+            one(input) shouldBe 38364
+        }
+
+        test("two") {
+            two(sample) shouldBe 29
+            two(input) shouldBe 30551
+        }
+    }
+})

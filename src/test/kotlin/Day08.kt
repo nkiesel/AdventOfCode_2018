@@ -1,24 +1,18 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day08 {
-    private val sample = """
-        2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>) = input[0].ints()
 
-    data class Node(val children: List<Node>, val meta: List<Int>, val part: Part) {
+    private data class Node(val children: List<Node>, val meta: List<Int>, val part: Part) {
         val value: Int = when {
             children.isEmpty() -> meta.sum()
             part == Part.ONE -> meta.sum() + children.sumOf { it.value }
             else -> meta.map { it - 1 }.filter { it in children.indices }.sumOf { children[it].value }
         }
     }
-
-    private fun one(input: List<String>) = three(input, Part.ONE)
-
-    private fun two(input: List<String>) = three(input, Part.TWO)
 
     private fun three(input: List<String>, part: Part): Int {
         val data = parse(input)
@@ -36,19 +30,29 @@ class Day08 {
             val meta = data.subList(ni, ni + nm)
             return Node(children, meta, part) to ni + nm
         }
-
         return getNode(0).first.value
     }
 
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 138
-        one(input) shouldBe 43825
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 66
-        two(input) shouldBe 19276
-    }
+    fun one(input: List<String>) = three(input, Part.ONE)
+    fun two(input: List<String>) = three(input, Part.TWO)
 }
+
+class Day08Test : FunSpec({
+    val input = Path("input/Day08.txt").readLines()
+
+    val sample = """
+        2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2
+    """.trimIndent().lines()
+
+    with(Day08()) {
+        test("one") {
+            one(sample) shouldBe 138
+            one(input) shouldBe 43825
+        }
+
+        test("two") {
+            two(sample) shouldBe 66
+            two(input) shouldBe 19276
+        }
+    }
+})

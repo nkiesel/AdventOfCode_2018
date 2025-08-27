@@ -1,16 +1,12 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day03 {
-    private val sample = """
-        #1 @ 1,3: 4x4
-        #2 @ 3,1: 4x4
-        #3 @ 5,5: 2x2
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>) = input.map { it.ints() }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         val counts = CountingMap<Point>()
         parse(input).forEach { l ->
             val (sx, sy, nx, ny) = l.drop(1)
@@ -23,7 +19,7 @@ class Day03 {
         return counts.values().count { it >= 2L }
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         val counts = mutableMapOf<Point, Int>()
         val sizes = mutableMapOf<Int, Int>()
         parse(input).forEach { l ->
@@ -42,16 +38,26 @@ class Day03 {
             .first { it.value == sizes[it.key] }
             .key
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 4
-        one(input) shouldBe 116140
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 3
-        two(input) shouldBe 574
-    }
 }
+
+class Day03Test : FunSpec({
+    val input = Path("input/Day03.txt").readLines()
+
+    val sample = """
+        #1 @ 1,3: 4x4
+        #2 @ 3,1: 4x4
+        #3 @ 5,5: 2x2
+    """.trimIndent().lines()
+
+    with(Day03()) {
+        test("one") {
+            one(sample) shouldBe 4
+            one(input) shouldBe 116140
+        }
+
+        test("two") {
+            two(sample) shouldBe 3
+            two(input) shouldBe 574
+        }
+    }
+})

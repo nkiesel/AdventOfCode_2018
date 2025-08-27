@@ -1,10 +1,9 @@
 import io.kotest.assertions.throwables.shouldThrowMessage
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
 
-class GraphTest {
-    @Test
-    fun `basic test for BFS`() {
+class GraphTest : FunSpec({
+    test("basic test for BFS") {
         data class TNode(val name: String) {
             override fun toString() = name
         }
@@ -20,8 +19,7 @@ class GraphTest {
         bfs(n1) { n -> edges.mapNotNull { e -> if (e.a == n) e.b else if (e.b == n) e.a else null }.filter { it != n } }.forEach { println(it) }
     }
 
-    @Test
-    fun `another basic test for BFS`() {
+    test("another basic test for BFS") {
         data class TNode(val name: String) {
             override fun toString() = name
         }
@@ -34,8 +32,7 @@ class GraphTest {
         bfs(n1) { n -> edges.filter { n in it }.map { e -> e.first { it != n } } }.forEach { println(it) }
     }
 
-    @Test
-    fun `basic test for BFS of directed graph`() {
+    test("basic test for BFS of directed graph") {
         data class TNode(val name: String, val next: Set<TNode>) {
             override fun toString() = name
         }
@@ -48,8 +45,7 @@ class GraphTest {
         bfs(n4) { it.next }.forEach { println(it) }
     }
 
-    @Test
-    fun `basic test for DFS of directed graph`() {
+    test("basic test for DFS of directed graph") {
         data class TNode(val name: String, val next: Set<TNode>) {
             override fun toString() = name
         }
@@ -62,8 +58,7 @@ class GraphTest {
         dfs(n4) { it.next }.forEach { println(it) }
     }
 
-    @Test
-    fun `shortest path`() {
+    test("shortest path") {
         shortestPath(
             'a',
             'e',
@@ -78,4 +73,4 @@ class GraphTest {
 
         shouldThrowMessage("No path from a to z") { shortestPath('a', 'z', 'a' to 'b') }
     }
-}
+})

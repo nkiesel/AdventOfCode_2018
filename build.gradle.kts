@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotest)
     alias(libs.plugins.versions.update)
 }
 
@@ -11,14 +12,10 @@ repositories {
 
 dependencies {
     testImplementation(libs.kotest.assertions.core)
-    implementation(libs.junit.jupiter)
-    implementation(libs.junit.jupiter.api)
-    implementation(libs.junit.jupiter.engine)
-    implementation(libs.junit.platform.launcher)
+    testImplementation(libs.kotest)
 }
 
 tasks.test {
-    useJUnitPlatform()
     minHeapSize = "1g"
     maxHeapSize = "30g"
     testLogging.showStandardStreams = true

@@ -1,41 +1,49 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day01 {
-    private val sample = """
+    private fun parse(input: List<String>) = input.map { it.toInt() }
+
+    fun one(input: List<String>): Int {
+        return parse(input).sum()
+    }
+
+    fun two(input: List<String>): Int {
+        val data = parse(input)
+        val seen = mutableSetOf<Int>()
+        var sum = 0
+        var idx = 0
+        do {
+            sum += data[idx]
+            idx = (idx + 1) % data.size
+        } while (seen.add(sum))
+        return sum
+    }
+}
+
+class Day01Test : FunSpec({
+    val input = Path("input/Day01.txt").readLines()
+
+    val sample = """
         +1
         -2
         +3
         +1
         """.trimIndent().lines()
 
-    private fun parse(input: List<String>) = input.map { it.toInt() }
 
-    private fun one(input: List<String>): Int {
-        return parse(input).sum()
-    }
+    with(Day01()) {
+        test("one") {
+            one(sample) shouldBe 3
+            one(input) shouldBe 402
+        }
 
-    private fun two(input: List<String>): Int {
-        val data = parse(input)
-        val seen = mutableSetOf<Int>()
-        var sum = 0
-        while (true) {
-            data.forEach {
-                sum += it
-                if (!seen.add(sum)) return sum
-            }
+        test("two") {
+            two(sample) shouldBe 2
+            two(input) shouldBe 481
         }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 3
-        one(input) shouldBe 402
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 2
-        two(input) shouldBe 481
-    }
 }
+)

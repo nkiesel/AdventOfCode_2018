@@ -1,25 +1,15 @@
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
-import org.junit.platform.commons.util.ClassLoaderUtils
+import io.kotest.core.spec.style.FunSpec
 import java.net.URL
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.time.measureTimedValue
 
-
-internal class UtilKtTest {
-    @Test
-    fun classLoader() {
-        val classLoader = ClassLoaderUtils.getDefaultClassLoader()
-        val resources: List<URL> = classLoader.getResources("junit-platform.properties").toList()
-        println(resources)
-    }
-
-    @Test
-    fun powerSet() {
+class UtilKtTest : FunSpec({
+    test("powerSet") {
         val s = setOf("A", "B", "C")
         val ps = s.powerSet().filter { it.isNotEmpty() && it.size != s.size }
         val pss = ps.map { it to (s - it) }
@@ -32,22 +22,19 @@ internal class UtilKtTest {
         println(measureTimedValue { sn.powerSetSeq().count() })
     }
 
-    @Test
-    fun powerSetSeq() {
+    test("powerSetSeq") {
         val s = setOf("A", "B", "C")
         val ps1 = s.powerSetSeq().toList()
         val ps2 = s.powerSet().toList()
         ps1 shouldBe ps2
     }
 
-    @Test
-    fun permutations() {
+    test("permutations") {
         println(listOf("a", "b", "c").permutations().toList())
         listOf("a", "b", "c").permutations().toList() shouldHaveSize 6
     }
 
-    @Test
-    fun neighbors4() {
+    test("neighbors4") {
         val ia = Array(5) { IntArray(5) }
 
         ia.neighbors4(0, 0) shouldHaveSize 2
@@ -56,8 +43,7 @@ internal class UtilKtTest {
         ia.neighbors4(1, 1) shouldHaveSize 4
     }
 
-    @Test
-    fun neighbors8() {
+    test("neighbors8") {
         val ia = Array(5) { IntArray(5) }
 
         ia.neighbors8(0, 0) shouldHaveSize 3
@@ -66,13 +52,11 @@ internal class UtilKtTest {
         ia.neighbors8(1, 1) shouldHaveSize 8
     }
 
-    @Test
-    fun chunkedBy() {
+    test("chunkedBy") {
         listOf(3, 1, 4, 1, 5, 9).chunkedBy { it % 2 == 0 } shouldBe listOf(listOf(3, 1), listOf(1, 5, 9))
     }
 
-    @Test
-    fun countingMap() {
+    test("countingMap") {
         val map = CountingMap<String>()
         map.inc("a")
         map.inc("b")
@@ -86,8 +70,7 @@ internal class UtilKtTest {
         map.entries().sumOf { it.value } shouldBe 6
     }
 
-    @Test
-    fun countingMapWithInit() {
+    test("countingMapWithInit") {
         val map = CountingMap(listOf("a", "b", "c", "d"))
         map.inc("a")
         map.inc("b")
@@ -101,8 +84,7 @@ internal class UtilKtTest {
         map.entries().sumOf { it.value } shouldBe 10
     }
 
-    @Test
-    fun gcd() {
+    test("gcd") {
         gcd(10, 5) shouldBe 5
         gcd(10, 15) shouldBe 5
         gcd(10L, 15L) shouldBe 5L
@@ -111,16 +93,14 @@ internal class UtilKtTest {
         gcd(101 * 3, 103 * 6) shouldBe 3
     }
 
-    @Test
-    fun numbers() {
+    test("numbers") {
         "a3b1c4d".ints() shouldBe listOf(3, 1, 4)
         "-1,3-".ints() shouldBe listOf(-1, 3)
         "a3b1c4d".longs() shouldBe listOf(3L, 1L, 4L)
         "-1,3-".longs() shouldBe listOf(-1L, 3L)
     }
 
-    @Test
-    fun lcm() {
+    test("lcm") {
         lcm(10, 5) shouldBe 10
         lcm(10, 15) shouldBe 30
         lcm(10L, 15L) shouldBe 30L
@@ -129,8 +109,7 @@ internal class UtilKtTest {
         lcm(101 * 3, 103 * 6) shouldBe 101 * 103 * 6
     }
 
-    @Test
-    fun minMax() {
+    test("minMax") {
         listOf(3, 1, 4, 1, 5, 9).minMax() shouldBe intArrayOf(1, 9)
         val (i, a) = listOf(3, 1, 4).minMax()
         i shouldBe 1
@@ -138,32 +117,27 @@ internal class UtilKtTest {
         listOf(3L, 1L, 4L, 1L, 5L, 9L).minMax() shouldBe longArrayOf(1L, 9L)
     }
 
-    @Test
-    fun `minMax using multiFold`() {
+    test("minMax using multiFold") {
         fun minMax(l: List<Int>) = l.multiFold(listOf(Int.MAX_VALUE, Int.MIN_VALUE), listOf(::min, ::max))
         minMax(listOf(3, 1, 4, 1, 5, 9)) shouldBe intArrayOf(1, 9)
     }
 
-    @Test
-    fun `minMax using multiReduce`() {
+    test("minMax using multiReduce") {
         fun minMax(l: List<Int>) = l.multiReduce(::min, ::max)
         minMax(listOf(3, 1, 4, 1, 5, 9)) shouldBe intArrayOf(1, 9)
     }
 
-    @Test
-    fun multiFold() {
+    test("multiFold") {
         listOf(3, 1, 4).multiFold(listOf(Int.MAX_VALUE, Int.MIN_VALUE), listOf(::min, ::max)) shouldBe listOf(1, 4)
     }
 
-    @Test
-    fun multiReduce() {
+    test("multiReduce") {
         listOf(3, 1, 4).reduce(::min) shouldBe 1
         listOf(3, 1, 4).reduce(::max) shouldBe 4
         listOf(3, 1, 4).multiReduce(::min, ::max) shouldBe listOf(1, 4)
     }
 
-    @Test
-    fun manhattanDistance() {
+    test("manhattanDistance") {
         manhattanDistance(0, 0, 2, 2) shouldBe 4
         manhattanDistance(0L, 0L, 2L, 2L) shouldBe 4L
         manhattanDistance(Point(0, 0), Point(2, 2)) shouldBe 4
@@ -172,4 +146,4 @@ internal class UtilKtTest {
         manhattanDistance(intArrayOf(0, 0), intArrayOf(1, 2)) shouldBe 3
         manhattanDistance(longArrayOf(0L, 0L), longArrayOf(1L, 2L)) shouldBe 3L
     }
-}
+})

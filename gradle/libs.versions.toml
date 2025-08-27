@@ -1,17 +1,13 @@
 [versions]
-junit5 = "5.13.4"
-junit5-launcher = "1.13.4"
 kotest = "6.0.1"
 kotlin = "2.2.10"
 plugin-versionsUpdate = "1.0.0"
 
 [libraries]
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit5-launcher" }
+kotest = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 
 [plugins]
+kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 versions-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "plugin-versionsUpdate" }

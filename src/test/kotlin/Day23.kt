@@ -1,34 +1,10 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.log10
-import kotlin.math.min
-import kotlin.math.pow
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
+import kotlin.math.*
 
 class Day23 {
-    private val sample = """
-        pos=<0,0,0>, r=4
-        pos=<1,0,0>, r=1
-        pos=<4,0,0>, r=3
-        pos=<0,2,0>, r=1
-        pos=<0,5,0>, r=3
-        pos=<0,0,3>, r=1
-        pos=<1,1,1>, r=1
-        pos=<1,1,2>, r=1
-        pos=<1,3,1>, r=1
-    """.trimIndent().lines()
-
-    private val sample2 = """
-        pos=<10,12,12>, r=2
-        pos=<12,14,12>, r=2
-        pos=<16,12,12>, r=4
-        pos=<14,14,14>, r=6
-        pos=<50,50,50>, r=200
-        pos=<10,10,10>, r=5
-    """.trimIndent().lines()
-
     data class Bot(val x: Int, val y: Int, val z: Int, val r: Int) {
         constructor(p: IntArray, r: Int) : this(p[0], p[1], p[2], r)
 
@@ -37,13 +13,13 @@ class Day23 {
 
     private fun parse(input: List<String>) = input.map { it.ints().let { it.take(3).toIntArray() to it.last() } }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         val teles = parse(input)
         val s = teles.maxBy { it.second }
         return teles.count { t -> manhattanDistance(t.first, s.first) <= s.second }
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         val bots = parse(input).map { Bot(it.first, it.second) }
         val minX = bots.minOf { it.x - it.r }
         val minY = bots.minOf { it.y - it.r }
@@ -69,11 +45,18 @@ class Day23 {
         return best
     }
 
-    private fun twoA(input: List<String>) {
+    fun twoA(input: List<String>) {
         val bots = parse(input).map { Bot(it.first, it.second) }
         val maxR = bots.maxOf { it.r }
         val f = 10.0.pow(floor(log10(maxR.toDouble())))
-        val b = bots.map { Bot(ceil(it.x / f).toInt(), ceil(it.y / f).toInt(), ceil(it.z / f).toInt(), ceil(it.r / f).toInt()) }
+        val b = bots.map {
+            Bot(
+                ceil(it.x / f).toInt(),
+                ceil(it.y / f).toInt(),
+                ceil(it.z / f).toInt(),
+                ceil(it.r / f).toInt()
+            )
+        }
         val p = foo(b, 0, 0, 0)
         println(p)
         for (x in p) {
@@ -100,17 +83,43 @@ class Day23 {
         }
         return p
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 7
-        one(input) shouldBe 326
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        twoA(sample2)
-//        two(sample2) shouldBe 36
-//        two(input) shouldBe 0
-    }
 }
+
+class Day23Test : FunSpec({
+    val input = Path("input/Day23.txt").readLines()
+
+    val sample = """
+        pos=<0,0,0>, r=4
+        pos=<1,0,0>, r=1
+        pos=<4,0,0>, r=3
+        pos=<0,2,0>, r=1
+        pos=<0,5,0>, r=3
+        pos=<0,0,3>, r=1
+        pos=<1,1,1>, r=1
+        pos=<1,1,2>, r=1
+        pos=<1,3,1>, r=1
+    """.trimIndent().lines()
+
+    val sample2 = """
+        pos=<10,12,12>, r=2
+        pos=<12,14,12>, r=2
+        pos=<16,12,12>, r=4
+        pos=<14,14,14>, r=6
+        pos=<50,50,50>, r=200
+        pos=<10,10,10>, r=5
+    """.trimIndent().lines()
+
+    with(Day23()) {
+        test("one") {
+            one(sample) shouldBe 7
+            one(input) shouldBe 326
+        }
+        test("twoA") {
+            twoA(sample2)
+        }
+        test("two") {
+            two(sample2) shouldBe 36
+            two(input) shouldBe 0
+        }
+    }
+})

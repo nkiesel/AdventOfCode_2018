@@ -1,16 +1,9 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day06 {
-    private val sample = """
-        1, 1
-        1, 6
-        8, 3
-        3, 4
-        5, 5
-        8, 9
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>) = input.map { it.ints().let { (x, y) -> Point(x, y) } }
 
     private lateinit var upperLeft: Point
@@ -22,7 +15,7 @@ class Day06 {
         for (x in upperLeft.x..lowerRight.x) for (y in upperLeft.y..lowerRight.y) yield(Point(x, y))
     }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         val points = parse(input)
         val edges = mutableSetOf<String>()
         return buildList {
@@ -39,20 +32,33 @@ class Day06 {
         }.filter { it !in edges }.groupingBy { it }.eachCount().values.max()
     }
 
-    private fun two(input: List<String>, maxSum: Int): Int {
+    fun two(input: List<String>, maxSum: Int): Int {
         val points = parse(input)
         return area(points, maxSum / points.size).count { p -> points.sumOf { manhattanDistance(p, it) } < maxSum }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 17
-        one(input) shouldBe 3420
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample, 32) shouldBe 16
-        two(input, 10_000) shouldBe 46667
-    }
 }
+
+class Day06Test : FunSpec({
+    val input = Path("input/Day06.txt").readLines()
+
+    val sample = """
+        1, 1
+        1, 6
+        8, 3
+        3, 4
+        5, 5
+        8, 9
+    """.trimIndent().lines()
+
+    with(Day06()) {
+        test("one") {
+            one(sample) shouldBe 17
+            one(input) shouldBe 3420
+        }
+
+        test("two") {
+            two(sample, 32) shouldBe 16
+            two(input, 10_000) shouldBe 46667
+        }
+    }
+})

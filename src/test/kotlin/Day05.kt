@@ -1,10 +1,10 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day05 {
-    private val sample = """dabAcCaCBAcCcaDA"""
-
-    private fun one(data: String): Int {
+    fun one(data: String): Int {
         val remaining = ArrayDeque<Char>(data.length)
         data.forEach {
             val c = if (it.isLowerCase()) it.uppercaseChar() else it.lowercaseChar()
@@ -13,19 +13,25 @@ class Day05 {
         return remaining.size
     }
 
-    private fun two(data: String): Int {
+    fun two(data: String): Int {
         return ('a'..'z').minOf { one(data.replace(it.toString(), "", ignoreCase = true)) }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 10
-        one(input[0]) shouldBe 9822
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 4
-        two(input[0]) shouldBe 5726
-    }
 }
+
+class Day05Test : FunSpec({
+    val input = Path("input/Day05.txt").readLines()
+
+    val sample = "dabAcCaCBAcCcaDA"
+
+    with(Day05()) {
+        test("one") {
+            one(sample) shouldBe 10
+            one(input[0]) shouldBe 9822
+        }
+
+        test("two") {
+            two(sample) shouldBe 4
+            two(input[0]) shouldBe 5726
+        }
+    }
+})

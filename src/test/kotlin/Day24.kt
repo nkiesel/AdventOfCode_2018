@@ -1,22 +1,14 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day24 {
-    private val sample = """
-        Immune System:
-        17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2
-        989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3
-
-        Infection:
-        801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1
-        4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4
-    """.trimIndent().lines()
-
     enum class Damage {
         radiation, fire, bludgeoning, cold, slashing
     }
 
-    class Group(
+    private class Group(
         val id: String,
         val army: Int,
         val initialUnits: Int,
@@ -64,13 +56,23 @@ class Day24 {
                 val weak = react(line, "weak")
                 val immune = react(line, "immune")
                 val damage = Regex("""(\w+) damage""").find(line)!!.groupValues[1].let { Damage.valueOf(it) }
-                armies[army] += Group("$name group ${id++}", army, ints[0], ints[1], weak, immune, damage, ints[2], ints[3])
+                armies[army] += Group(
+                    "$name group ${id++}",
+                    army,
+                    ints[0],
+                    ints[1],
+                    weak,
+                    immune,
+                    damage,
+                    ints[2],
+                    ints[3]
+                )
             }
         }
         return armies
     }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         val (immune, infection) = parse(input)
         fights(immune, infection)
         return (immune + infection).sumOf { it.units }
@@ -101,7 +103,7 @@ class Day24 {
         } while (immune.isNotEmpty() && infection.isNotEmpty() && kills > 0)
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         val (origImmune, origInfection) = parse(input)
         var minBoost = 0
         var maxBoost = 1000
@@ -123,16 +125,28 @@ class Day24 {
             }
         }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 5216
-        one(input) shouldBe 15470
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe 51
-        two(input) shouldBe 5742
-    }
 }
+
+class Day24Test : FunSpec({
+    val input = Path("input/Day24.txt").readLines()
+
+    val sample = """
+        Immune System:
+        17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2
+        989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3
+
+        Infection:
+        801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1
+        4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4
+    """.trimIndent().lines()
+
+    test("one") {
+        Day24().one(sample) shouldBe 5216
+        Day24().one(input) shouldBe 15470
+    }
+
+    test("two") {
+        Day24().two(sample) shouldBe 51
+        Day24().two(input) shouldBe 5742
+    }
+})

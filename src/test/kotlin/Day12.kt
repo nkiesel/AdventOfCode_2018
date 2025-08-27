@@ -1,33 +1,16 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day12 {
-    private val sample = """
-        initial state: #..#.#..##......###...###
-
-        ...## => #
-        ..#.. => #
-        .#... => #
-        .#.#. => #
-        .#.## => #
-        .##.. => #
-        .#### => #
-        #.#.# => #
-        #.### => #
-        ##.#. => #
-        ##.## => #
-        ###.. => #
-        ###.# => #
-        ####. => #
-    """.trimIndent().lines()
-
-    private fun parse(input: List<String>): Pair<String, Map<String, String>> {
+    fun parse(input: List<String>): Pair<String, Map<String, String>> {
         val initial = input[0].substringAfter("initial state: ")
-        val rules = input.drop(2).associate { it.split(" => ").let { it[0] to it[1] } }
+        val rules = input.drop(2).associate { l -> l.split(" => ").let { it[0] to it[1] } }
         return initial to rules
     }
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         val (initial, rules) = parse(input)
         var table = initial.trimStart('.')
         var removed = initial.length - table.length
@@ -43,7 +26,7 @@ class Day12 {
         return table.withIndex().sumOf { (i, s) -> if (s == '#') i - removed else 0 }
     }
 
-    private fun two(input: List<String>): Long {
+    fun two(input: List<String>): Long {
         val (initial, rules) = parse(input)
         var table = initial.trimStart('.')
         var removed = (initial.length - table.length).toLong()
@@ -70,15 +53,38 @@ class Day12 {
         }
         return table.withIndex().sumOf { (i, s) -> if (s == '#') i - removed else 0 }
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 325
-        one(input) shouldBe 4386
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(input) shouldBe 5450000001166L
-    }
 }
+
+class Day12Test : FunSpec({
+    val input = Path("input/Day12.txt").readLines()
+
+    val sample = """
+        initial state: #..#.#..##......###...###
+
+        ...## => #
+        ..#.. => #
+        .#... => #
+        .#.#. => #
+        .#.## => #
+        .##.. => #
+        .#### => #
+        #.#.# => #
+        #.### => #
+        ##.#. => #
+        ##.## => #
+        ###.. => #
+        ###.# => #
+        ####. => #
+    """.trimIndent().lines()
+
+    with(Day12()) {
+        test("one") {
+            one(sample) shouldBe 325
+            one(input) shouldBe 4386
+        }
+
+        test("two") {
+            two(input) shouldBe 5450000001166L
+        }
+    }
+})

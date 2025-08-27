@@ -1,28 +1,38 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day21 {
-    private val sample = """""".trimIndent().lines()
+    val sample = """"""
+        .trimIndent()
+        .lines()
 
-    private fun parse(input: List<String>) = input
+    fun parse(input: List<String>) = input
 
-    private fun one(input: List<String>): Int {
+    fun one(input: List<String>): Int {
         return 0
     }
 
-    private fun two(input: List<String>): Int {
+    fun two(input: List<String>): Int {
         return 0
-    }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe 0
-//        one(input) shouldBe 0
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-//        two(sample) shouldBe 0
-//        two(input) shouldBe 0
     }
 }
+
+class Day21Test : FunSpec({
+    val input = Path("input/Day21.txt").readLines()
+
+    val sample = Day21().sample
+
+    with(Day21()) {
+        test("one") {
+            one(sample) shouldBe 0
+            // one(input) shouldBe <expected_result> // Uncomment and set expected value when ready
+        }
+
+        test("two") {
+            two(sample) shouldBe 0
+            // two(input) shouldBe <expected_result> // Uncomment and set expected value when ready
+        }
+    }
+})

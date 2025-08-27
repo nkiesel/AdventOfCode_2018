@@ -1,13 +1,11 @@
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
 import kotlin.math.max
 import kotlin.math.sqrt
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 
 class Day11 {
-    private val sample = """
-        18
-    """.trimIndent().lines()
-
     private fun parse(input: List<String>): Array<IntArray> {
         val serial = input[0].toInt()
         val area = Array(300) { IntArray(300) { 0 } }
@@ -20,7 +18,7 @@ class Day11 {
         return area
     }
 
-    private fun one(input: List<String>): String {
+    fun one(input: List<String>): String {
         val area = parse(input)
         var m = Int.MIN_VALUE
         var p = ""
@@ -37,7 +35,7 @@ class Day11 {
         return p
     }
 
-    private fun two(input: List<String>): String {
+    fun two(input: List<String>): String {
         val area = parse(input)
         var m = Int.MIN_VALUE
         var p = ""
@@ -57,16 +55,24 @@ class Day11 {
         }
         return p
     }
-
-    @Test
-    fun testOne(input: List<String>) {
-        one(sample) shouldBe "33,45"
-        one(input) shouldBe "21,41"
-    }
-
-    @Test
-    fun testTwo(input: List<String>) {
-        two(sample) shouldBe "90,269,16"
-        two(input) shouldBe "227,199,19"
-    }
 }
+
+class Day11Test : FunSpec({
+    val input = Path("input/Day11.txt").readLines()
+
+    val sample = """
+        18
+    """.trimIndent().lines()
+
+    with(Day11()) {
+        test("one") {
+            one(sample) shouldBe "33,45"
+            one(input) shouldBe "21,41"
+        }
+
+        test("two") {
+            two(sample) shouldBe "90,269,16"
+            two(input) shouldBe "227,199,19"
+        }
+    }
+})

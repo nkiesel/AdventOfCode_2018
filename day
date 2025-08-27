@@ -18,7 +18,7 @@ code="$dir/Day$dd.kt"
 session="session"
 
 if [[ ! -s "$code" ]]; then
-  sed -e "s/class Template/class Day$dd/" "$template" > "$code"
+  sed -e "s/Template/Day$dd/g" "$template" > "$code"
   git add "$code"
 fi
 

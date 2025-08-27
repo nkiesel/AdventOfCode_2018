@@ -2,11 +2,10 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.sequences.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.FunSpec
 
-class CharAreaTest {
-    @Test
-    fun `Simple CharArea`() {
+class CharAreaTest : FunSpec({
+    test("Simple CharArea") {
         val area = CharArea(10, 10, '.')
         area[1, 1] = '*'
         val p = Point(2, 2)
@@ -15,8 +14,7 @@ class CharAreaTest {
         area.png()
     }
 
-    @Test
-    fun `CharArea with border`() {
+    test("CharArea with border") {
         val area = CharArea(10, 10, ' ')
         area.edges().forEach { area[it] = '#' }
         for (x in area.xRange) {
@@ -33,8 +31,7 @@ class CharAreaTest {
         area.png()
     }
 
-    @Test
-    fun `Some CharArea ops`() {
+    test("Some CharArea ops") {
         val area = CharArea(10, 10, ' ')
 
         area.neighbors4(Point(0, 0)) shouldHaveSize 2
@@ -60,16 +57,14 @@ class CharAreaTest {
         area.edges() shouldHaveSize 36
     }
 
-    @Test
-    fun `CharArea rotation`() {
+    test("CharArea rotation") {
         val area = CharArea(2, 3, ' ')
         area.tiles().forEach { area[it] = (it.x + it.y).digitToChar() }
         area.show()
         area.rotated().show()
     }
 
-    @Test
-    fun Points() {
+    test("Points") {
         val p1 = Point(1, 3)
         val p2 = p1.move(Direction.E)
         val d = p1 - p2
@@ -78,11 +73,10 @@ class CharAreaTest {
         p1.direction(p2) shouldBe Direction.E
     }
 
-    @Test
-    fun `Manhattan for area`() {
+    test("Manhattan for area") {
         val area = CharArea(10, 10, ' ')
         area.manhattan(Point(0, 0), 1) shouldHaveSize 2
         area.manhattan(Point(0, 0), 2) shouldHaveSize 5
         area.manhattan(Point(5, 5), 2) shouldHaveSize 12
     }
-}
+})
