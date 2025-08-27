@@ -1,0 +1,4 @@
+#!/bin/zsh
+./gradlew versionCatalogUpdate
+./gradlew wrapper --gradle-version=latest
+git diff
