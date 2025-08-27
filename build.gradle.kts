@@ -33,6 +33,7 @@ kotlin {
             listOf(
                 "-Xcontext-sensitive-resolution",
                 "-Xcontext-parameters",
+                "-Xnested-type-aliases",
             )
         )
     }

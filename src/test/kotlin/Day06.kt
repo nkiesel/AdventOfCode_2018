@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day06 {
     private fun parse(input: List<String>) = input.map { it.ints().let { (x, y) -> Point(x, y) } }
@@ -39,7 +37,7 @@ class Day06 {
 }
 
 class Day06Test : FunSpec({
-    val input = Path("input/Day06.txt").readLines()
+    val input = lines("Day06")
 
     val sample = """
         1, 1

@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day19 {
     private enum class Op {
@@ -13,6 +11,7 @@ class Day19 {
         gtir, gtri, gtrr,
         eqir, eqri, eqrr
     }
+
     private data class Instruction(val op: Op, val a: Int, val b: Int, val c: Int) {
         fun execute(r: MutableList<Long>) {
             r[c] = when (op) {
@@ -70,7 +69,7 @@ class Day19 {
 }
 
 class Day19Test : FunSpec({
-    val input = Path("input/Day19.txt").readLines()
+    val input = lines("Day19")
 
     val sample = """
         #ip 0

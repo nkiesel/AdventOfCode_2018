@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day24 {
     enum class Damage {
@@ -128,7 +126,7 @@ class Day24 {
 }
 
 class Day24Test : FunSpec({
-    val input = Path("input/Day24.txt").readLines()
+    val input = lines("Day24")
 
     val sample = """
         Immune System:

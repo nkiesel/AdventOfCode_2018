@@ -2,8 +2,6 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlin.math.max
 import kotlin.math.sqrt
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day11 {
     private fun parse(input: List<String>): Array<IntArray> {
@@ -58,7 +56,7 @@ class Day11 {
 }
 
 class Day11Test : FunSpec({
-    val input = Path("input/Day11.txt").readLines()
+    val input = lines("Day11")
 
     val sample = """
         18

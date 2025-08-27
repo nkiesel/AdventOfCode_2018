@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day07 {
     private fun parse(input: List<String>): Pair<MutableSet<Char>, Map<Char, Set<Char>>> {
@@ -69,7 +67,7 @@ class Day07 {
 }
 
 class Day07Test : FunSpec({
-    val input = Path("input/Day07.txt").readLines()
+    val input = lines("Day07")
 
     val sample = """
         Step C must be finished before step A can begin.

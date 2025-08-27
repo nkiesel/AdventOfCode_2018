@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 enum class Part { ONE, TWO }
 
@@ -26,9 +24,11 @@ class Day04 {
                     guard = a[1].drop(1).toInt()
                     fellAsleep = -1
                 }
+
                 "falls" -> {
                     fellAsleep = minute
                 }
+
                 "wakes" -> {
                     minutes.inc(guard, minute - fellAsleep)
                     asleep.getOrPut(guard) { mutableListOf() }.add(fellAsleep..<minute)
@@ -61,7 +61,7 @@ class Day04 {
 }
 
 class Day04Test : FunSpec({
-    val input = Path("input/Day04.txt").readLines()
+    val input = lines("Day04")
 
     val sample = """
         [1518-11-01 00:00] Guard #10 begins shift

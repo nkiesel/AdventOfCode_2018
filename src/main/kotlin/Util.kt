@@ -1,10 +1,14 @@
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.io.path.Path
+import kotlin.io.path.readLines
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 typealias IntPair = Pair<Int, Int>
+
+fun lines(day: String) = Path("input/$day.txt").readLines()
 
 /**
  * Creates a sequence of permutations. number of permutations of a list of length n is n!. This is an implementation

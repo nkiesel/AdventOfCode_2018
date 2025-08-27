@@ -2,8 +2,6 @@ import Direction.N
 import Direction.W
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day22 {
     private val rocky = '.'
@@ -103,7 +101,7 @@ class Day22 {
 }
 
 class Day22Test : FunSpec({
-    val input = Path("input/Day22.txt").readLines()
+    val input = lines("Day22")
 
     val sample = """
         depth: 510

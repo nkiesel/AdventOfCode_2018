@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Day10 {
     fun one(input: List<String>): Int {
@@ -9,11 +7,10 @@ class Day10 {
         var pos = data.map { it.first }
         val vel = data.map { it.second }
         var s = 0
-        while (true) {
+        do {
             s++
             pos = pos.mapIndexed { i, p -> p.move(vel[i]) }
-            if (pos.any { p -> (0..6).all { p.move(0, -it) in pos } }) break
-        }
+        } while (pos.none { p -> (0..6).all { p.move(0, -it) in pos } })
         val minX = pos.minOf { it.x }
         val minY = pos.minOf { it.y }
         val maxX = pos.maxOf { it.x }
@@ -26,7 +23,7 @@ class Day10 {
 }
 
 class Day10Test : FunSpec({
-    val input = Path("input/Day10.txt").readLines()
+    val input = lines("Day10")
 
     val sample = """
         position=< 9,  1> velocity=< 0,  2>

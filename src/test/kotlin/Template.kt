@@ -1,7 +1,5 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.io.path.Path
-import kotlin.io.path.readLines
 
 class Template {
     private fun parse(input: List<String>) = input
@@ -16,7 +14,7 @@ class Template {
 }
 
 class TemplateTest : FunSpec({
-    val input = Path("input/Template.txt").readLines()
+    val input = lines("Template")
 
     val sample = """""".trimIndent().lines()
 
