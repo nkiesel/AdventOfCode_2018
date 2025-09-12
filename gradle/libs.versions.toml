@@ -1,6 +1,6 @@
 [versions]
 kotest = "6.0.3"
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 plugin-versionsUpdate = "1.0.0"
 
 [libraries]
