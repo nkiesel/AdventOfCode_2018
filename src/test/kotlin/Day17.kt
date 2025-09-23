@@ -1,5 +1,6 @@
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import Direction.*
 
 object Day17 {
     private fun parse(input: List<String>): List<Point> {
@@ -18,7 +19,7 @@ object Day17 {
         while (true) {
             n = n.move(direction)
             when {
-                area[n.move(Direction.S)] == '.' -> return null
+                area[n.move(S)] == '.' -> return null
                 area[n] == '#' -> return l
                 else -> l += n
             }
@@ -29,7 +30,7 @@ object Day17 {
     private fun fill(s: Point) {
         var n = s
         while (true) {
-            n = n.move(Direction.S)
+            n = n.move(S)
             if (n !in area) return
             when (area[n]) {
                 '.' -> area[n] = '|'
@@ -39,18 +40,18 @@ object Day17 {
         }
 
         while (true) {
-            n = n.move(Direction.N)
-            val left = toWall(n, Direction.W)
-            val right = toWall(n, Direction.E)
+            n = n.move(N)
+            val left = toWall(n, W)
+            val right = toWall(n, E)
             if (left == null || right == null) break
             (left + right + n).forEach { area[it] = '~' }
         }
-        for (d in listOf(Direction.E, Direction.W)) {
+        for (d in listOf(E, W)) {
             var s: Char
             var m = n
             do {
                 area[m] = '|'
-                s = area[m.move(Direction.S)]
+                s = area[m.move(S)]
                 m = m.move(d)
             } while (s != '.' && s != '|' && area[m] != '#')
             if (s == '.') {
@@ -69,16 +70,15 @@ object Day17 {
         with(area) {
             fill(spring)
         }
-        area.tiles { it == '|' }.filter { area[it.move(Direction.N)] == '~' }.forEach { area[it] = '~' }
+        area.tiles { it == '|' }.filter { area[it.move(N)] == '~' }.forEach { area[it] = '~' }
 //        area.png()
         val minY = points.minOf { it.y }
-        val relevant = if (part == Part.ONE) setOf('~', '|') else setOf('~')
+        val relevant = if (part == ONE) setOf('~', '|') else setOf('~')
         return area.tiles { it in relevant }.filter { it.y >= minY }.count()
     }
 
-    fun one(input: List<String>) = three(input, Part.ONE)
-    fun two(input: List<String>) = three(input, Part.TWO)
-
+    fun one(input: List<String>) = three(input, ONE)
+    fun two(input: List<String>) = three(input, TWO)
 }
 
 object Day17Test : FunSpec({
