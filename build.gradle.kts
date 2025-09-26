@@ -25,7 +25,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
     @Suppress("UnsafeCompilerArguments")
     compilerOptions {
         suppressWarnings = true
