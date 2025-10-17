@@ -1,7 +1,7 @@
 [versions]
-kotest = "6.0.3"
+kotest = "6.0.4"
 kotlin = "2.2.20"
-plugin-versionsUpdate = "1.0.0"
+plugin-versionsUpdate = "1.0.1"
 
 [libraries]
 kotest = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
